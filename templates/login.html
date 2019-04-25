@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}
+登录
+{% end %}
+
+{% block content %}
+<div>
+    <input type="button" value="开启摄像头" onclick="getMedia()">
+    <video id="video" height="200px;" width="200px;"></video>
+</div>
+<div>
+    <input type="button" value="拍照" onclick="takePhoto()">
+    <canvas id="canvas" height="200px;" width="200px;"></canvas>
+</div>
+<form action="" method="post">
+    <p><input type="hidden" id="face" name="face"></p>
+    <p>姓名：<input type="text" name="username"></p>
+    <p><input type="submit" value="登录"></p>
+</form>
+{% end %}
+
+{% block js %}
+<script>
+    function getMedia() {
+        let constraints = {
+            video: {width: 200, height: 200},
+            audio: true
+        };
+        let video = document.getElementById("video");
+        let promise = navigator.mediaDevices.getUserMedia(constraints);
+        promise.then(function (MediaStream) {
+            video.srcObject = MediaStream;
+            video.play();
+        });
+    }
+
+    function takePhoto() {
+        let video = document.getElementById("video");
+        let canvas = document.getElementById("canvas");
+        let ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, 200, 200);
+        var face = document.getElementById("face");
+        var canvas1 = document.getElementById('canvas');
+        face.value = canvas1.toDataURL('image/png')
+    }
+</script>
+{% end %}
